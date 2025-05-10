@@ -1,9 +1,9 @@
-package com.aliaboubakr.cart_feature.data.loca.database
+package com.aliaboubakr.cart_feature.data.local.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.aliaboubakr.cart_feature.data.loca.database.dao.CartDao
-import com.aliaboubakr.cart_feature.data.loca.database.entity.CartEntity
+import com.aliaboubakr.cart_feature.data.local.database.dao.CartDao
+import com.aliaboubakr.cart_feature.data.local.database.entity.CartEntity
 
 @Database(entities = [CartEntity::class], version = 1, exportSchema = false)
 abstract class CartDatabase :RoomDatabase(){
