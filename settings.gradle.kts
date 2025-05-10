@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Super App"
 include(":app")
- 
+include(":cart_feature")

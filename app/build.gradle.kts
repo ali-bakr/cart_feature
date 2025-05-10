@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.aliaboubakr.superapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.aliaboubakr.superapp"
