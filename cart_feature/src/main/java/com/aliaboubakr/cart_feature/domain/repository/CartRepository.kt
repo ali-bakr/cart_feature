@@ -20,5 +20,6 @@ interface CartRepository {
     suspend fun addCartItem(item: CartItemDto)
     suspend fun updateCartItem(item: CartItemDto)
     suspend fun deleteCartItem(itemId: Long)
+    suspend fun deleteAllCartItems()
     suspend fun syncCart()
 }

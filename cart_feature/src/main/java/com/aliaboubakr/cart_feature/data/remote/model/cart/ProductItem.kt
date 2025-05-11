@@ -1,6 +1,6 @@
 package com.aliaboubakr.cart_feature.data.remote.model.cart
 
-data class CartItem(
+data class ProductItem(
     val id: Long = 0,
     val name: String,
     val quantity: Int,

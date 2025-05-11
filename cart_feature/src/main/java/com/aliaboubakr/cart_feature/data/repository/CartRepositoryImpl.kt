@@ -13,6 +13,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -57,7 +58,7 @@ class CartRepositoryImpl @Inject constructor(
         isForceRefresh: Boolean,
     ): Flow<Resources<List<CartItemDto>>> {
         forceRefreshItems(isForceRefresh)
-        return flow {emit(Resources.Success(getFilteredItemsFromDB(query, showBought, sortAsc)))}
+        return flow { emit(Resources.Success(getFilteredItemsFromDB(query, showBought, sortAsc))) }
     }
 
     private suspend fun getFilteredItemsFromDB(
@@ -76,8 +77,9 @@ class CartRepositoryImpl @Inject constructor(
         showBought: Boolean,
         sortAsc: SortCriteria,
     ): List<CartItemDto> {
-        return if (isAscending(sortAsc)) cartDao.getSearchItemsAsc(query,showBought).toItemDtoList()
-        else cartDao.getSearchItemsDes(query,showBought).toItemDtoList()
+        return if (isAscending(sortAsc)) cartDao.getSearchItemsAsc(query, showBought)
+            .toItemDtoList()
+        else cartDao.getSearchItemsDes(query, showBought).toItemDtoList()
     }
 
     private fun isAscending(sortAsc: SortCriteria): Boolean {
@@ -111,13 +113,17 @@ class CartRepositoryImpl @Inject constructor(
         deleteCartItemFromDB(itemId)
     }
 
+    override suspend fun deleteAllCartItems() {
+        deleteAllItems()
+    }
+
     override suspend fun syncCart() {
         TODO("Not yet implemented")
     }
 
 
     //#done
-    private suspend fun deleteAllCartItems() {
+    private suspend fun deleteAllItems() {
         cartDao.delete()
     }
 
@@ -156,8 +162,10 @@ class CartRepositoryImpl @Inject constructor(
         if (isForceRefresh) {
             coroutineScope {
                 launch { deleteCartItems() }.join()
-                //todo fix
-//                launch { insertCartItems(async { remoteDataSource.getRemoteCartItemList().data }.await()) }.join()
+                launch {
+                    val data = async { remoteDataSource.getRemoteCartItemList().data }.await()
+                    data?.let { insertCartItems(it) }
+                }.join()
             }
         }
     }

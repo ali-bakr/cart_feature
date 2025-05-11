@@ -19,8 +19,23 @@ class RemoteDataSource @Inject constructor (private val cartAPi: CartAPi) : IRem
             Resources.Error("ERROR ${e.localizedMessage}")
         }
     }
+    override suspend fun getAvailableRemoteItemsList():Resources<List<CartItemDto>> {
+        return try {
+            val data = featchAllRemoteItemsMocked()
+            if (data.isNotEmpty()){
+                Resources.Success(data)
+            }else{
+                Resources.Error("ERROR Empty Data")
+            }
+        }catch (e :Exception){
+            Resources.Error("ERROR ${e.localizedMessage}")
+        }
+    }
     private suspend fun featchRemoteCartItemsMocked(): List<CartItemDto> {
         return MockHelper.generateMockCartItems()
+    }
+    private suspend fun featchAllRemoteItemsMocked(): List<CartItemDto> {
+        return MockHelper.generateMockProductItems()
     }
 
 }
