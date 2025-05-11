@@ -2,12 +2,12 @@ package com.aliaboubakr.cart_feature.data.repository
 
 import com.aliaboubakr.cart_feature.core.util.Resources
 import com.aliaboubakr.cart_feature.data.enum.SortCriteria
-import com.aliaboubakr.cart_feature.data.local.database.dao.CartDao
-import com.aliaboubakr.cart_feature.data.mapper.CartMapper.toEntity
-import com.aliaboubakr.cart_feature.data.mapper.CartMapper.toItemDtoList
+import com.aliaboubakr.cart_feature.data.local.database.dao.ProductsDao
+import com.aliaboubakr.cart_feature.data.mapper.ProductsMapper.toItemDtoList
+import com.aliaboubakr.cart_feature.data.mapper.ProductsMapper.toProductEntity
 import com.aliaboubakr.cart_feature.data.remote.datasource.RemoteDataSource
 import com.aliaboubakr.cart_feature.domain.model.ProductItemDto
-import com.aliaboubakr.cart_feature.domain.repository.CartRepository
+import com.aliaboubakr.cart_feature.domain.repository.ProductsRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -17,40 +17,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CartRepositoryImpl @Inject constructor(
+class ProductsRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
-    private val cartDao: CartDao,
-) : CartRepository {
-    /**
-    override fun getImages(text: String): Flow<Resources<List<CartItem>>> {
-    return flow {
-    emit(Resources.Loading(true))
-    val remoteList = try {
-    imageAPi.getImages(text)
-    } catch (e: IOException) {
-    e.printStackTrace()
-    emit(Resources.Error("Could not load data"))
-    null
-    } catch (e: HttpException) {
-    e.printStackTrace()
-    emit(Resources.Error("Could not load data"))
-    null
-    }
+    private val productsDao: ProductsDao,
+) : ProductsRepository {
 
-    if (remoteList == null) {
-    emit(Resources.Loading(false))
-    }
-    remoteList.let { listing ->
-    emit(Resources.Success(data = listing?.images?.map { it.toImage() }))
-    emit(Resources.Loading(false))
-    }
-    }
-    }
-
-     **/
-
-
-    override suspend fun getCartItemsByName(
+    override suspend fun getProductsItemsByName(
         query: String?,
         showBought: Boolean,
         sortAsc: SortCriteria,
@@ -76,9 +48,9 @@ class CartRepositoryImpl @Inject constructor(
         showBought: Boolean,
         sortAsc: SortCriteria,
     ): List<ProductItemDto> {
-        return if (isAscending(sortAsc)) cartDao.getSearchItemsAsc(query, showBought)
+        return if (isAscending(sortAsc)) productsDao.getSearchItemsAsc(query, showBought)
             .toItemDtoList()
-        else cartDao.getSearchItemsDes(query, showBought).toItemDtoList()
+        else productsDao.getSearchItemsDes(query, showBought).toItemDtoList()
     }
 
     private fun isAscending(sortAsc: SortCriteria): Boolean {
@@ -93,8 +65,8 @@ class CartRepositoryImpl @Inject constructor(
         showBought: Boolean,
         sortAsc: SortCriteria,
     ): List<ProductItemDto> {
-        return if (isAscending(sortAsc)) cartDao.getAllItemsAsc(showBought).toItemDtoList()
-        else cartDao.getAllItemsDes(showBought).toItemDtoList()
+        return if (isAscending(sortAsc)) productsDao.getAllItemsAsc(showBought).toItemDtoList()
+        else productsDao.getAllItemsDes(showBought).toItemDtoList()
     }
 
     //#done
@@ -103,57 +75,34 @@ class CartRepositoryImpl @Inject constructor(
     }
 
     //#done
-    override suspend fun updateCartItem(item: ProductItemDto) {
-        updateCartItemInDB(item)
-    }
-
-    //#done
-    override suspend fun deleteCartItem(itemId: Long) {
-        deleteCartItemFromDB(itemId)
-    }
-
-    override suspend fun deleteAllCartItems() {
-        deleteAllItems()
-    }
-
-    override suspend fun syncCart() {
-        TODO("Not yet implemented")
-    }
-
-
-    //#done
+    
     private suspend fun deleteAllItems() {
-        cartDao.delete()
+        productsDao.delete()
     }
 
     //#done
 
 
     //#done
-    private suspend fun insertCartItems(items: List<ProductItemDto>) {
+    private suspend fun insertProductsItems(items: List<ProductItemDto>) {
         items.map {
-            cartDao.insert(it.toEntity())
+            productsDao.insert(it.toProductEntity())
         }
     }
 
     //#done
     private suspend fun insertCartItem(item: ProductItemDto) {
-        cartDao.insert(item.toEntity())
+        productsDao.insert(item.toProductEntity())
     }
 
     //#done
     private suspend fun deleteCartItems() {
-        cartDao.delete()
-    }
-
-    //#done
-    private suspend fun updateCartItemInDB(productItemDto: ProductItemDto) {
-        cartDao.update(productItemDto.toEntity())
+        productsDao.delete()
     }
 
     //#done
     private suspend fun deleteCartItemFromDB(itemId: Long) {
-        cartDao.delete(itemId)
+        productsDao.delete(itemId)
     }
 
     //#done
@@ -163,7 +112,7 @@ class CartRepositoryImpl @Inject constructor(
                 launch { deleteCartItems() }.join()
                 launch {
                     val data = async { remoteDataSource.getRemoteCartItemList().data }.await()
-                    data?.let { insertCartItems(it) }
+                    data?.let { insertProductsItems(it) }
                 }.join()
             }
         }

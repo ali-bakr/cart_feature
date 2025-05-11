@@ -5,12 +5,12 @@ import com.aliaboubakr.cart_feature.data.enum.SortCriteria
 import com.aliaboubakr.cart_feature.domain.model.ProductItemDto
 import kotlinx.coroutines.flow.Flow
 
-interface CartRepository {
+interface ProductsRepository {
 //    suspend fun getAllCartItems(
 //        showBought: Boolean?=true,
 //        sortAsc: SortCriteria = SortCriteria.SORT_ASS
 //    ): Flow<Resources<List<CartItemDto>>>
-    suspend fun getCartItemsByName(
+    suspend fun getProductsItemsByName(
     query: String?,
     showBought: Boolean=true,
     sortAsc: SortCriteria = SortCriteria.SORT_ASC,
@@ -18,8 +18,5 @@ interface CartRepository {
     ): Flow<Resources<List<ProductItemDto>>>
 
     suspend fun addCartItem(item: ProductItemDto)
-    suspend fun updateCartItem(item: ProductItemDto)
-    suspend fun deleteCartItem(itemId: Long)
-    suspend fun deleteAllCartItems()
-    suspend fun syncCart()
+
 }
