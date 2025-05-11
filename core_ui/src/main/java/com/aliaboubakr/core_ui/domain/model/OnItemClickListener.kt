@@ -1,0 +1,7 @@
+package com.aliaboubakr.core_ui.domain.model
+
+import com.aliaboubakr.core_ui.data.enum.Action
+
+interface OnItemClickListener <T>{
+    fun onItemClick(item:T,action: Action = Action.ADD)
+}
