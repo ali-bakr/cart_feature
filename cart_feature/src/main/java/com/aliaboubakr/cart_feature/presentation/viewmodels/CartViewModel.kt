@@ -30,8 +30,11 @@ class CartViewModel  @Inject constructor(
     private val _showEmptyLayoutStateFlow = MutableStateFlow<Boolean>(false)
     val showEmptyLayoutStateFlow: StateFlow<Boolean> = _showEmptyLayoutStateFlow.asStateFlow()
 
+    init {
+        loadCartItems(showBought = false, sortCriteria = SortCriteria.SORT_ASC)
+    }
 
-    suspend fun loadCartItems(query: String? = null, showBought: Boolean = true, sortCriteria: SortCriteria = SortCriteria.SORT_ASC) {
+     fun loadCartItems(query: String? = null, showBought: Boolean = true, sortCriteria: SortCriteria = SortCriteria.SORT_ASC) {
         viewModelScope.launch {
            cartUseCase.getCartItemsUseCase.invoke(query,showBought, sortCriteria).onStart {
                _showProgressStateFlow.emit(true)
