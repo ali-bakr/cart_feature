@@ -17,6 +17,6 @@ class CartAdapter @Inject constructor(@ApplicationContext private val context:Co
     }
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
-        holder.bind(items[position],onItemClickListener)
+        holder.bind(items[position],onItemClickedListener)
     }
 }
