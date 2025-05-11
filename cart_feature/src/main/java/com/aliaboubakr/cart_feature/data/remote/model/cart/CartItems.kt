@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class CartItems(
     @SerializedName("cartItems")
-    var cartItems: ArrayList<CartItem>,
+    var cartItems: ArrayList<ProductItem>,
 )

@@ -5,7 +5,12 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface CartAPi {
-    @GET("search")
+    @GET("products/grocery?")
+    suspend fun getAllGroceryItems(
+        @Query("q") q:String
+    ): CartItems
+
+    @GET("{user_id}/cart?")
     suspend fun getCartItems(
         @Query("q") q:String
     ): CartItems
