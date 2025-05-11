@@ -5,7 +5,7 @@ import androidx.room.Room
 import com.aliaboubakr.cart_feature.data.constants.DatabaseConstants.DATABASE_NAME
 import com.aliaboubakr.cart_feature.data.local.database.CartDatabase
 import com.aliaboubakr.cart_feature.data.local.database.dao.CartDao
-import com.aliaboubakr.cart_feature.data.remote.CartAPi
+import com.aliaboubakr.cart_feature.data.remote.ShoppingAPi
 import com.aliaboubakr.cart_feature.data.remote.datasource.RemoteDataSource
 import dagger.Module
 import dagger.Provides
@@ -24,7 +24,7 @@ import javax.inject.Singleton
 object AppModule {
     @Provides
     @Singleton
-    fun provideCartApi(): CartAPi {
+    fun provideCartApi(): ShoppingAPi {
         return Retrofit.Builder()
             .baseUrl("https://lexica.art/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
@@ -38,7 +38,7 @@ object AppModule {
                     }).build()
             )
             .build()
-            .create(CartAPi::class.java)
+            .create(ShoppingAPi::class.java)
     }
 
     @Singleton
@@ -48,8 +48,8 @@ object AppModule {
     }
     @Provides
     @Singleton
-    fun provideRemoteDataSource(cartAPi: CartAPi): RemoteDataSource {
-        return RemoteDataSource(cartAPi)
+    fun provideRemoteDataSource(shoppingAPi: ShoppingAPi): RemoteDataSource {
+        return RemoteDataSource(shoppingAPi)
     }
 
     @Provides

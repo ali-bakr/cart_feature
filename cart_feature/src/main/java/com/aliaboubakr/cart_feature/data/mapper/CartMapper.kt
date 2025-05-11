@@ -1,11 +1,11 @@
 package com.aliaboubakr.cart_feature.data.mapper
 
 import com.aliaboubakr.cart_feature.data.local.database.entity.CartEntity
-import com.aliaboubakr.cart_feature.domain.model.CartItemDto
+import com.aliaboubakr.cart_feature.domain.model.ProductItemDto
 
 object CartMapper {
-    fun CartEntity.toItemDto(): CartItemDto {
-        return CartItemDto(
+    fun CartEntity.toItemDto(): ProductItemDto {
+        return ProductItemDto(
             id = id,
             name = name,
             quantity = quantity,
@@ -15,7 +15,7 @@ object CartMapper {
         )
     }
 
-    fun CartItemDto.toEntity(): CartEntity {
+    fun ProductItemDto.toEntity(): CartEntity {
         return CartEntity(
             id = id,
             name = name,
@@ -25,11 +25,11 @@ object CartMapper {
             timestamp = timestamp
         )
     }
-    fun List<CartEntity>.toItemDtoList(): List<CartItemDto> {
+    fun List<CartEntity>.toItemDtoList(): List<ProductItemDto> {
         return map { it.toItemDto() }
     }
 
-    fun List<CartItemDto>.toEntityList(): List<CartEntity> {
+    fun List<ProductItemDto>.toEntityList(): List<CartEntity> {
         return map { it.toEntity() }
     }
 }

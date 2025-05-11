@@ -1,4 +1,4 @@
-package com.naeemdev.jetpackcomposemviarchitecture
+package com.aliaboubakr.cart_feature
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aliaboubakr.cart_feature.core.util.Resources
 import com.aliaboubakr.cart_feature.data.enum.SortCriteria
-import com.aliaboubakr.cart_feature.domain.model.CartItemDto
+import com.aliaboubakr.cart_feature.domain.model.ProductItemDto
 import com.aliaboubakr.cart_feature.domain.usecase.CartUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,8 +21,8 @@ class CartViewModel  @Inject constructor(
     private val cartUseCase: CartUseCase,
 ) : ViewModel() {
 
-    private val _cartItemsStateFlow = MutableStateFlow<Resources<List<CartItemDto>>>(Resources.Loading())
-    val cartItemsStateFlow: StateFlow<Resources<List<CartItemDto>>> = _cartItemsStateFlow.asStateFlow()
+    private val _cartItemsStateFlow = MutableStateFlow<Resources<List<ProductItemDto>>>(Resources.Loading())
+    val cartItemsStateFlow: StateFlow<Resources<List<ProductItemDto>>> = _cartItemsStateFlow.asStateFlow()
 
     private val _showProgressStateFlow = MutableStateFlow<Boolean>(false)
     val showProgressStateFlow: StateFlow<Boolean> = _showProgressStateFlow.asStateFlow()
@@ -48,14 +48,14 @@ class CartViewModel  @Inject constructor(
         }
     }
 
-    fun updateItem(item: CartItemDto) {
+    fun updateItem(item: ProductItemDto) {
         viewModelScope.launch {
             val updated = item.copy(isBought = !item.isBought)
             cartUseCase.updateCartItemUseCase.invoke(updated)
             loadCartItems() // Refresh after update
         }
     }
-    fun deleteItem(item: CartItemDto) {
+    fun deleteItem(item: ProductItemDto) {
         viewModelScope.launch {
             cartUseCase.deleteCartItem.invoke(item.id)
             loadCartItems() // Refresh after update
