@@ -22,3 +22,5 @@ dependencyResolutionManagement {
 rootProject.name = "Super App"
 include(":app")
 include(":cart_feature")
+include(":navigationrouter")
+include(":core_ui")
