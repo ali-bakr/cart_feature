@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "com.aliaboubakr.cart_feature"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24
@@ -47,7 +47,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.lifecycle.viewmodel.android)
-    implementation(libs.androidx.lifecycle.viewmodel.android)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.fragment.ktx)
@@ -84,5 +83,6 @@ dependencies {
     implementation(libs.retrofit.converter.gson)
     implementation(libs.okhttp.logging.interceptor)
     implementation(project(":core_ui"))
+    implementation(project(":navigationrouter"))
 
 }

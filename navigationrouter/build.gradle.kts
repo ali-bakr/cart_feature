@@ -1,15 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    kotlin("kapt")
 }
 
 android {
-    namespace = "com.aliaboubakr.core_ui"
+    namespace = "com.aliaboubakr.navigationrouter"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.aliaboubakr.core_ui"
+        applicationId = "com.aliaboubakr.navigationrouter"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -31,10 +30,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    buildFeatures {
-        viewBinding=true
-        dataBinding=true
-    }
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -42,15 +37,12 @@ android {
 
 dependencies {
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
+    api(libs.androidx.core.ktx)
+    api(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.viewbinding)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    api("androidx.navigation:navigation-fragment-ktx:2.7.5")
+    api("androidx.navigation:navigation-ui-ktx:2.7.5")
 }
