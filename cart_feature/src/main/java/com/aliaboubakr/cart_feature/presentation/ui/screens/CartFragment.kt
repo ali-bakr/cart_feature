@@ -33,7 +33,12 @@ class CartFragment : BaseFragment<FragmentCartBinding>(FragmentCartBinding::infl
             viewLifecycleOwner.lifecycleScope.launch {
                 cartViewModel.cartItemsStateFlow.collectLatest {
                     when(it){
-                        is Resources.Success->{}
+                        is Resources.Success->{
+                            it.data?.let {
+                                cartAdapter.submitList(it)
+                            }
+
+                        }
                         else -> {}
                     }
 
@@ -56,7 +61,7 @@ class CartFragment : BaseFragment<FragmentCartBinding>(FragmentCartBinding::infl
 
             viewLifecycleOwner.lifecycleScope.launch {
                 cartViewModel.showProgressStateFlow .collect {
-
+                    handelProgress(it)
                 }
             }
 
@@ -66,7 +71,9 @@ class CartFragment : BaseFragment<FragmentCartBinding>(FragmentCartBinding::infl
                 }
             }
         }
-
+    private fun handelProgress(it: Boolean) {
+        binding.progress.visibility=if (it) View.VISIBLE else View.GONE
+    }
     private fun initViews() {
         with(binding){
             cartRv.adapter=cartAdapter

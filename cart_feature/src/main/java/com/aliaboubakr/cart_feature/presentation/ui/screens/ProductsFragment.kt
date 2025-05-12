@@ -30,17 +30,19 @@ class ProductsFragment : BaseFragment<FragmentProductsBinding>(FragmentProductsB
     @Inject
     lateinit var productAdapter :ProductsAdapter
     override fun initObservables() {
-
+        initViews()
         viewLifecycleOwner.lifecycleScope.launch {
             productsViewModel.productsItemsStateFlow.collectLatest {
-
+                it.data?.let {
+                    productAdapter.submitList(it)
+                }
 
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
             productsViewModel.showProgressStateFlow .collect {
-
+                handelProgress(it)
             }
         }
 
@@ -62,6 +64,11 @@ class ProductsFragment : BaseFragment<FragmentProductsBinding>(FragmentProductsB
             }
         }
     }
+
+    private fun handelProgress(it: Boolean) {
+        binding.progress.visibility=if (it) View.VISIBLE else View.GONE
+    }
+
     private fun initViews() {
         with(binding){
             productsRv.adapter=productAdapter
