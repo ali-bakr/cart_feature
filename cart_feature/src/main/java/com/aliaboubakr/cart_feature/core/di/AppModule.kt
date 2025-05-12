@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.aliaboubakr.cart_feature.data.constants.DatabaseConstants.DATABASE_NAME
 import com.aliaboubakr.cart_feature.data.local.database.CartDatabase
 import com.aliaboubakr.cart_feature.data.local.database.dao.CartDao
+import com.aliaboubakr.cart_feature.data.local.database.dao.ProductsDao
 import com.aliaboubakr.cart_feature.data.remote.ShoppingAPi
 import com.aliaboubakr.cart_feature.data.remote.datasource.RemoteDataSource
 import dagger.Module
@@ -54,8 +55,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCartDao(cartDatabase: CartDatabase): CartDao {
-        return cartDatabase.cartDao
+    fun provideCartDao(database: CartDatabase): CartDao {
+        return database.cartDao
+    }
+
+    @Provides
+    @Singleton
+    fun provideProductDao(database: CartDatabase): ProductsDao {
+        return database.productsDao
     }
 
 }

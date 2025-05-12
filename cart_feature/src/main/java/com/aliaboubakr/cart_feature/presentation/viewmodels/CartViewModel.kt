@@ -30,6 +30,9 @@ class CartViewModel  @Inject constructor(
     private val _showEmptyLayoutStateFlow = MutableStateFlow<Boolean>(false)
     val showEmptyLayoutStateFlow: StateFlow<Boolean> = _showEmptyLayoutStateFlow.asStateFlow()
 
+    private val _cartAlertDialogStateFlow = MutableStateFlow<String>("")
+    val cartAlertDialogStateFlow: StateFlow<String> = _cartAlertDialogStateFlow.asStateFlow()
+
     init {
         loadCartItems(showBought = false, sortCriteria = SortCriteria.SORT_ASC)
     }
@@ -40,6 +43,7 @@ class CartViewModel  @Inject constructor(
                _showProgressStateFlow.emit(true)
            }.catch {
                _showProgressStateFlow.emit(false)
+               _cartItemsStateFlow.emit(Resources.Error("Error ${it.localizedMessage}"))
            }.collectLatest {
                _showProgressStateFlow.emit(false)
                _showProgressStateFlow.emit(it.data.isNullOrEmpty())
@@ -52,19 +56,19 @@ class CartViewModel  @Inject constructor(
         viewModelScope.launch {
             val updated = item.copy(isBought = !item.isBought)
             cartUseCase.updateCartItemUseCase.invoke(updated)
-            loadCartItems() // Refresh after update
+            loadCartItems()
         }
     }
     fun deleteItem(item: ProductItemDto) {
         viewModelScope.launch {
             cartUseCase.deleteCartItem.invoke(item.id)
-            loadCartItems() // Refresh after update
+            loadCartItems()
         }
     }
     fun deleteAllItems() {
         viewModelScope.launch {
             cartUseCase.deleteCartItem.invoke()
-            loadCartItems() // Refresh after update
+            loadCartItems()
         }
     }
 }

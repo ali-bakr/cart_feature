@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.aliaboubakr.cart_feature.core.util.Resources
 import com.aliaboubakr.cart_feature.data.enum.SortCriteria
 import com.aliaboubakr.cart_feature.domain.model.ProductItemDto
-import com.aliaboubakr.cart_feature.domain.usecase.CartUseCase
 import com.aliaboubakr.cart_feature.domain.usecase.products.ProductsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,6 +30,9 @@ class ProductsViewModel  @Inject constructor(
     private val _showEmptyLayoutStateFlow = MutableStateFlow<Boolean>(false)
     val showEmptyLayoutStateFlow: StateFlow<Boolean> = _showEmptyLayoutStateFlow.asStateFlow()
 
+    private val _cartAlertDialogStateFlow = MutableStateFlow<String>("")
+    val cartAlertDialogStateFlow: StateFlow<String> = _cartAlertDialogStateFlow.asStateFlow()
+
     init {
         loadProductsItems(showBought = false, sortCriteria = SortCriteria.SORT_ASC)
     }
@@ -41,6 +43,7 @@ class ProductsViewModel  @Inject constructor(
                _showProgressStateFlow.emit(true)
            }.catch {
                _showProgressStateFlow.emit(false)
+                _cartAlertDialogStateFlow.emit("Error ${it.localizedMessage}")
            }.collectLatest {
                _showProgressStateFlow.emit(false)
                _showProgressStateFlow.emit(it.data.isNullOrEmpty())
@@ -53,7 +56,8 @@ class ProductsViewModel  @Inject constructor(
         viewModelScope.launch {
             val updated = item.copy(isBought = !item.isBought)
             productsUseCase.addProductToCartUseCase.invoke(updated)
-            loadProductsItems() // Refresh after update
+            _cartAlertDialogStateFlow.emit("Item ${item.name} added to cart.")
+            loadProductsItems()
         }
     }
 

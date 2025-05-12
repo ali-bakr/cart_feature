@@ -21,35 +21,6 @@ class CartRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val cartDao: CartDao,
 ) : CartRepository {
-    /**
-    override fun getImages(text: String): Flow<Resources<List<CartItem>>> {
-    return flow {
-    emit(Resources.Loading(true))
-    val remoteList = try {
-    imageAPi.getImages(text)
-    } catch (e: IOException) {
-    e.printStackTrace()
-    emit(Resources.Error("Could not load data"))
-    null
-    } catch (e: HttpException) {
-    e.printStackTrace()
-    emit(Resources.Error("Could not load data"))
-    null
-    }
-
-    if (remoteList == null) {
-    emit(Resources.Loading(false))
-    }
-    remoteList.let { listing ->
-    emit(Resources.Success(data = listing?.images?.map { it.toImage() }))
-    emit(Resources.Loading(false))
-    }
-    }
-    }
-
-     **/
-
-
     override suspend fun getCartItemsByName(
         query: String?,
         showBought: Boolean,
